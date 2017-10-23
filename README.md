@@ -1,11 +1,8 @@
-# Desarrollo de Sistemas de Software basados en Componentes y Servicios
+Desarrollo de Sistemas de Software basados en Componentes y Servicios
+=====================================================================
 
-Repositorio de trabajo de la asignatura  del Máster en Ingeniería Informática de la Universidad de Granada (UGR) Edit
+Repositorio de trabajo de la asignatura `Desarrollo de Sistemas de Software basados en Componentes y Servicios` del **Máster en Ingeniería Informática** de la Universidad de Granada (UGR) 
 
-
-
-Informática Grafica
-===================
 
 Prácticas de la asignatura de Desarrollo de Sistemas de Software basados en Componentes y Servicios (DSS) del Máster Profesional en Ingeniería Informática de la Universidad de Granada (UGR)
 
