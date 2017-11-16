@@ -1,0 +1,338 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Movie interface</title>
+  <link href="css/bootstrap.css" rel="stylesheet" />
+
+  <script src="js/jquery-1.11.0.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <h2>Movies list</h2> <a href="../crud/create_movie.html">Insertar con imagen</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-9">
+        <table id="movieTable"
+               class="table table-bordered table-condensed table-striped">
+          <thead>
+            <tr>
+              <th>Edit</th>
+              <th>title</th>
+              <th>genre</th>
+              <th>director</th>
+              <th>year</th>
+              <th>synopsis</th>
+              <th>image</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <button type="button" id="addButton"
+                class="btn btn-primary"
+                onclick="addClick();">
+          Add Movie
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            Movie Information
+          </div>
+          <div class="panel-body">
+            <form id="add">
+            <div class="form-group">
+
+
+            <div class="form-group">
+                <label for="id">Id</label>
+                <input class="form-control" id="id" name="id" />
+            </div>
+            <div class="form-group">
+                <label for="title">Titulo</label>
+                <input class="form-control" id="title" name="title" />
+            </div>
+            <div class="form-group">
+                <label for="genre">Genero</label>
+                <input class="form-control" id="genre" name="genre" />
+            </div>
+            <div class="form-group">
+                <label for="director">Director</label>
+                <input class="form-control" id="director" name="director" />
+            </div>
+            <div class="form-group">
+                <label for="year">A&ntilde;o</label>
+                <input class="form-control" type="number" id="year" name="year" />
+            </div>
+            <div class="form-group">
+              <label for="synopsis">Sinopsis</label>
+                <textarea class="form-control" id="synopsis" name="synopsis"></textarea>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-xs-12">
+                <button type="submit" id="updateButton"
+                        class="btn btn-primary"
+                        onclick="updateClick();">
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+            
+       
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script>
+    $(document).ready(function () {
+      movieList();
+    });
+
+    var Movie = {
+      id: "0",
+      title: "",
+      genre: "",
+      director: "",
+      year: "",
+      synopsis: "",
+      image: ""
+
+    }
+
+    function movieGet(ctl) {
+      // Get movie id from data- attribute
+      var id = $(ctl).data("id");
+
+      // Store movie id in hidden field
+      $("#id").val(id);
+
+      // Call Web API to get a Movie
+      $.ajax({
+        url: "http://localhost:8080/crud/rest/movies/" + id,
+        type: 'GET',
+        dataType: 'xml',
+        success: function (movie) {
+          movieToFields(movie);
+
+          // Change Update Button Text
+          $("#updateButton").text("Update");
+        },
+        error: function (request, message, error) {
+          handleException(request, message, error);
+        }
+      });
+    }
+
+    function updateClick() {
+
+      // Build movie object from inputs
+      Movie = new Object();
+      Movie.id = $("#id").val();
+      Movie.title = $("#title").val();
+      Movie.genre = $("#genre").val();
+      Movie.director = $("#director").val();
+      Movie.year = $("#year").val();
+      Movie.synopsis= $("#synopsis").val();
+
+      if ($("#updateButton").text().trim() == "Add") {
+        movieAdd(Movie);
+      }
+      else {
+        movieUpdate(Movie);
+      }
+    }
+
+    function addClick() {
+      formClear();
+    }
+
+    function movieUpdate(movie) {
+
+
+      var url = "http://localhost:8080/crud/rest/movies/" + movie.id;
+
+      // Call Web API to update movie
+      $.ajax({
+        url: url,
+        type: 'PUT',
+        dataType: 'xml',
+        data: $('#add').serialize(),
+        success: function (movie) {
+          movieUpdateSuccess(movie);
+        },
+        error: function (request, message, error) {
+          handleException(request, message, error);
+        }
+      });
+    }
+
+    function movieUpdateSuccess(movie) {
+      movieUpdateInTable(movie);
+    }
+
+    function movieAdd(movie) {
+      // Call Web API to add a new movie
+      $.ajax({
+        url: "http://localhost:8080/crud/rest/movies/",
+        type: 'POST',
+        data: $('#add').serialize(),
+        success: function (movie) {
+          movieAddSuccess(movie);
+        },
+        error: function (request, message, error) {
+          handleException(request, message, error);
+        }
+      });
+    }
+
+    function movieAddSuccess(movie) {
+      movieAddRow(movie);
+      formClear();
+    }
+
+    // Update movie in <table>
+    function movieUpdateInTable(movie) {
+      // Find Movie in <table>
+      var row = $("#movieTable button[data-id='" + movie.id + "']")
+                .parents("tr")[0];
+      // Add changed movie to table
+      $(row).after(movieBuildTableRow(movie));
+      // Remove original movie
+      $(row).remove();
+
+      // Clear form fields
+      formClear();
+
+      // Change Update Button Text
+      $("#updateButton").text("Add");
+    }
+
+    function movieToFields(movie) {
+      $("#id").val($(movie).find("id").text());
+      $("#title").val($(movie).find("title").text());
+      $("#genre").val($(movie).find("genre").text());
+      $("#director").val($(movie).find("director").text());
+      $("#year").val($(movie).find("year").text());
+      $("#synopsis").val($(movie).find("synopsis").text());
+    }
+
+    // Get all Movies to display
+    function movieList() {
+      // Call Web API to get a list of Movies
+      $.ajax({
+        url: 'http://localhost:8080/crud/rest/movies/',
+        type: 'GET',
+        dataType: 'xml',
+        success: function (movies) {
+          movieListSuccess(movies);
+        },
+        error: function (request, message, error) {
+          handleException(request, message, error);
+        }
+      });
+    }
+
+    // Display all Movies returned from Web API call
+    function movieListSuccess(movies) {
+      // Iterate over the collection of data
+      $.each(movies.children[0].children, function (index, movie) {
+        // Add a row to the Movie table
+        movieAddRow(movie);
+      });
+    }
+
+    // Add Movie row to <table>
+    function movieAddRow(movie) {
+      // First check if a <tbody> tag exists, add one if not
+      if ($("#movieTable tbody").length == 0) {
+        $("#movieTable").append("<tbody></tbody>");
+      }
+
+      // Append row to <table>
+      $("#movieTable tbody").append(
+        movieBuildTableRow(movie));
+    }
+
+    // Build a <tr> for a row of table data
+    function movieBuildTableRow(movie)
+    {
+      var ret = "<tr>" +
+            "<td>" +
+              "<button type='button' " +
+                  "onclick='movieGet(this);' " +
+                  "class='btn btn-default' " +
+                  "data-id='" + $(movie).find("id").text() + "'>" +
+                  "<span class='glyphicon glyphicon-edit' />" +
+              "</button>" +
+            "</td>" +
+            "<td>" + $(movie).find("title").text()  + "</td>" +
+            "<td>" + $(movie).find("genre").text()  + "</td>" +
+            "<td>" + $(movie).find("director").text()  + "</td>" +
+            "<td>" + $(movie).find("year").text()  + "</td>" +
+            "<td>" + $(movie).find("synopsis").text()  + "</td>" +
+            "<td><img src='" + $(movie).find("image").text()  + "'/></td>" +
+          "</tr>";
+
+      return ret;
+    }
+
+    // Clear form fields
+    function formClear() {
+      $("#moviename").val("");
+      $("#url").val("");
+    }
+
+    // Handle exceptions from AJAX calls
+    function handleException(request, message, error) {
+      var msg = "";
+
+      msg += "Code: " + request.status + "\n";
+      msg += "Text: " + request.statusText + "\n";
+      if (request.responseJSON != null) {
+        msg += "Message" + request.responseJSON.Message + "\n";
+      }
+
+      alert(msg);
+    }
+  </script>
+  
+   <script>
+ 
+ $('#button').click(function(e) {
+	 
+	    var file = document.getElementById('imageinput').files[0];
+	    if (file) {
+	        // create reader
+	        var reader = new FileReader();
+	        reader.readAsDataURL(file);
+	        
+	        reader.onload = function(e) {
+	            // browser completed reading file - display it
+	            var imageData = e.target.result;
+	            document.getElementsByName("image")[0].setAttribute("value", imageData);
+
+	            
+	        };
+	        
+	       
+	    }
+
+	});
+ 
+ </script>
+  
+</body>
+</html>
