@@ -10,9 +10,13 @@ Consta de n módulos practicos:
 
 1. Aplicación Web utilizando JSF, JSP y servlets de Java
 
-2.  Java Persistence API (JPA)
+2. Java Persistence API (JPA)
 
-3. ...
+3. Servicios REST
+
+4. BPEL
+
+5. Android
 
 NOTA
 ====
