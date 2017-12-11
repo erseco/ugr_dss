@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.2.1" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+<class-diagram version="1.2.2" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="movies.MoviesResource" project="crud" file="/crud/src/movies/MoviesResource.java" 
     binary="false" corner="BOTTOM_RIGHT">    
@@ -12,7 +12,7 @@
   </class>  
   <class id="2" language="java" name="movies.MovieResource" project="crud" file="/crud/src/movies/MovieResource.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="227" width="261" x="703" y="14"/>    
+    <position height="-1" width="-1" x="737" y="127"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,7 +30,7 @@
   </class>  
   <enumeration id="4" language="java" name="movies.MovieDao" project="crud" file="/crud/src/movies/MovieDao.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="119" width="191" x="472" y="14"/>    
+    <position height="-1" width="-1" x="114" y="481"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -39,7 +39,7 @@
   </enumeration>  
   <class id="5" language="java" name="movies.Movie" project="crud" file="/crud/src/movies/Movie.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="425" width="277" x="472" y="281"/>    
+    <position height="-1" width="-1" x="615" y="540"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -48,8 +48,12 @@
   </class>  
   <association id="6">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="7" name="contentProvider"/>      
-      <multiplicity id="8" minimum="0" maximum="2147483647"/>    
+      <attribute id="7" name="contentProvider">        
+        <position height="0" width="0" x="5" y="47"/>      
+      </attribute>      
+      <multiplicity id="8" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="5" y="47"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
