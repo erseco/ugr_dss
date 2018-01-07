@@ -116,10 +116,9 @@
 
           jQuery.getJSON( baseUrl + '/products/'+product.id, function(json){
 
-
            result = result + product.quantity + " x " + json.name + " " + json.price + " €\n";
 
-            // FIX for multiple products
+            // TODO FIX for multiple products (put the addrow outside)
             order.products = result;
             console.log(result);
             // Add a row to the Order table
@@ -128,22 +127,12 @@
 
            });
 
-
         });
-
 
       } else {
         // Add a row to the Order table
         orderAddRow(order);
       }
-
-
-
-
-
-
-
-
 
       });
     }
