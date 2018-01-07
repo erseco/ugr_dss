@@ -27,4 +27,18 @@ module.exports = function(app) {
     .delete(product.delete_a_product);
 
 
+  var order = require('../controllers/orderController');
+
+  // order Routes
+  app.route('/orders')
+    .get(order.list_all_orders)
+    .post(order.create_a_order);
+
+
+  app.route('/orders/:orderId')
+    .get(order.read_a_order)
+    .put(order.update_a_order)
+    .delete(order.delete_a_order);
+
+
 };

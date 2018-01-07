@@ -5,6 +5,7 @@ var express = require('express'),
 
   Task = require('./api/models/todoListModel'), //created model loading here
   Product = require('./api/models/productModel'), //created model loading here
+  Order = require('./api/models/orderModel'), //created model loading here
 
   bodyParser = require('body-parser');
 

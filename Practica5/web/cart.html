@@ -66,17 +66,20 @@
                         <td class="text-right"><h3><strong><span id="total">0</span> €</strong></h3></td>
                     </tr>
                     <tr>
-                        <td>   </td>
+                        <form id="add" method="post" onsubmit="orderAdd();">
+                        <td><input type="email" id="email" name="email" class="form-control" placeholder="Enter a valid email address" required="" autofocus=""></td>
                         <td>   </td>
                         <td>   </td>
                         <td>
-                        <button type="button" class="btn btn-default">
+
+                        <button type="button" class="btn btn-default" onclick="window.location.href='list.html?pharmacy=1'">
                             <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
                         </button></td>
                         <td>
-                        <button type="button" class="btn btn-success">
+                        <button type="submit" class="btn btn-success">
                             Checkout <span class="glyphicon glyphicon-play"></span>
                         </button></td>
+                      </form>
                     </tr>
                 </tbody>
             </table>
@@ -138,13 +141,71 @@
     }
 
 
+    // Add Product row to <table>
+    function productDeleteRow(product) {
+      // // First check if a <tbody> tag exists, add one if not
+      // if ($("#productTable tbody").length == 0) {
+      //   $("#products").append("<tbody></tbody>");
+      // }
+
+      // Append row to <table>
+      $("#"+product).remove();
+
+
+      updatePrices();
+
+    }
+
+  $('form#add').submit(function(e) {
+      e.preventDefault();
+      // do something
+  });
+
+
+    function orderAdd()
+    {
+
+      var id = $.url().param('id');
+      var quantity = $(".quantity").val();
+
+      var products = new Array();
+      products.push({id: id, quantity: quantity})
+
+      var pharmacy = 1;
+      var email = $("#email").val();
+      var total = $("#total").text();
+      var status = "pending";
+
+      // Call Web API to add a new order
+      $.ajax({
+        url: baseUrl + "/orders/",
+        type: 'POST',
+        data: "pharmacy=" + pharmacy + "&email=" + email + "&total=" + total + "&status=pending&products=" + JSON.stringify(products),
+        success: function (order) {
+          OrderAddSuccess(order);
+        },
+        error: function (request, message, error) {
+          handleException(request, message, error);
+        }
+      });
+
+      // alert("You must enter your e-mail address");
+
+    }
+
+    function OrderAddSuccess(order)
+    {
+       alert("Order with id: " + order._id +  " placed sucessfully added. Redirecting to main page...");
+       window.location.href = "index.html";
+    }
+
 
     // Build a <tr> for a row of table data
     function productBuildTableRow(product)
     {
 
 
-        var ret = '<tr>' +
+        var ret = '<tr id="' + product._id +'">' +
           '   <input type="hidden" class="id" value="' + product._id +'"/>' +
           '   <td class="col-sm-8 col-md-6">' +
           '   <div class="media">' +
@@ -160,7 +221,7 @@
           '   <td class="col-sm-1 col-md-1 text-center"><strong><span class="productprice">' + product.price + '</span> €</strong></td>' +
           '   <td class="col-sm-1 col-md-1 text-center"><strong><span class="producttotal">' + product.price + '</span> €</strong></td>' +
           '   <td class="col-sm-1 col-md-1">' +
-          '   <button type="button" class="btn btn-danger">' +
+          '   <button type="button" class="btn btn-danger" onclick="productDeleteRow(\'' + product._id +'\');">' +
           '       <span class="glyphicon glyphicon-remove"></span> Remove' +
           '   </button></td>' +
           '</tr>';
