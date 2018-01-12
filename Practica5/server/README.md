@@ -4,4 +4,7 @@ For running this server API you need
 
 `npm run start`
 
-npm run start --background
+If you want to run in background
+
+`forever start server.js`
+
