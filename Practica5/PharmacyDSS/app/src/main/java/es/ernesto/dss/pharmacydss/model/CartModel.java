@@ -14,7 +14,7 @@ import java.util.List;
 public class CartModel {
 
     public List<ProductQuantityPair> products = new ArrayList<ProductQuantityPair>();
-    private int total = 0;
+    public int total = 0;
     public String pharmacy = "0";
     public String status = "pending";
     public String email = "";
@@ -24,7 +24,6 @@ public class CartModel {
         ProductQuantityPair pair = new ProductQuantityPair();
         pair.id = product._id;
         pair.product = product;
-        pair.product.quantity = quantity;
         pair.quantity = quantity;
 
         products.add(pair);

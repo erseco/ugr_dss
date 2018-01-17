@@ -1,0 +1,24 @@
+# PharmacyDSS
+
+Práctica 5 de la asignatura Desarrollo de Sistemas de Software basados en Componentes y Servicios
+
+ - server: servidor node.js
+ - client: cliente android
+ - web: cliente web
+
+
+
+
+Para ejecutar el servidor hace falta node.js y ejecutar la instrucción: npm run start
+
+Se puede visitar la web funcionando en:
+
+http://dss.ernesto.es
+
+y el servicio REST en
+
+http://dss.ernesto.es:8080/products/
+http://dss.ernesto.es:8080/orders/
+
+La aplicación android se puede descargar en:
+

@@ -11,8 +11,6 @@ public class ProductModel {
     public String manufacturer;
     public String status;
 
-    public int quantity; // only for orders
-
 
     public ProductModel(String _id, String name, String price, String manufacturer, String status){
         this._id = _id;

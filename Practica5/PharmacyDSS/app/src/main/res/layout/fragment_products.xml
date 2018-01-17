@@ -46,7 +46,7 @@
 
     <Button
         android:id="@+id/product_add"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@android:style/Widget.Button"
         android:layout_width="20dp"
         android:layout_height="wrap_content"
         android:layout_weight="4"

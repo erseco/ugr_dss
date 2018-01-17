@@ -34,11 +34,25 @@ public class MyCartRecyclerViewAdapter extends RecyclerView.Adapter<MyCartRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
 
-        holder.mNameView.setText(mValues.get(position).product.name);
-        holder.mManufacturerView.setText(mValues.get(position).product.manufacturer);
-        holder.mQuantityView.setText(String.valueOf(mValues.get(position).product.quantity));
-        holder.mTotalView.setText(String.valueOf(Integer.parseInt(mValues.get(position).product.price)* mValues.get(position).product.quantity));
-        //holder.mContentView.setText(mValues.get(position).product.name);
+
+        String text = "";
+
+
+
+        text += String.valueOf(mValues.get(position).quantity);
+        text += "x ";
+        text += mValues.get(position).product.name;
+        text += " (";
+        text += mValues.get(position).product.manufacturer;
+        text += " ): ";
+        text += mValues.get(position).product.price;
+        text += " € = ";
+        text += String.valueOf(Integer.parseInt(mValues.get(position).product.price)* mValues.get(position).quantity);
+        text += " €";
+
+
+
+        holder.mNameView.setText(text);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,9 +74,6 @@ public class MyCartRecyclerViewAdapter extends RecyclerView.Adapter<MyCartRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mNameView;
-        public final TextView mManufacturerView;
-        public final TextView mQuantityView;
-        public final TextView mTotalView;
 
         public CartModel.ProductQuantityPair mItem;
 
@@ -70,9 +81,6 @@ public class MyCartRecyclerViewAdapter extends RecyclerView.Adapter<MyCartRecycl
             super(view);
             mView = view;
             mNameView = (TextView) view.findViewById(R.id.cart_name);
-            mManufacturerView = (TextView) view.findViewById(R.id.cart_manufacturer);
-            mQuantityView = (TextView) view.findViewById(R.id.cart_quantity);
-            mTotalView = (TextView) view.findViewById(R.id.cart_product_total);
         }
 
         @Override

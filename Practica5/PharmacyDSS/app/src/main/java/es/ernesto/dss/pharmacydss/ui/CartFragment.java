@@ -2,7 +2,9 @@ package es.ernesto.dss.pharmacydss.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -69,79 +71,101 @@ public class CartFragment extends Fragment {
 
 
 
-            final EditText email = (EditText) view.findViewById(R.id.order_email);
-            Button button = (Button) view.findViewById(R.id.oder_button);
+        final EditText email = (EditText) view.findViewById(R.id.order_email);
+        Button button = (Button) view.findViewById(R.id.oder_button);
 
-            email.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        email.setText(MainActivity.cart.email);
+
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                MainActivity.cart.email = email.getText().toString();
+            }
+        });
+
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                CartModel cart = MainActivity.cart;
+                if (Integer.parseInt( cart.getTotal()) == 0) {
+
+                    Toast.makeText(MainActivity.context, "Your cart is empty", Toast.LENGTH_LONG).show();
+
+                } else if (cart.email == "" || !android.util.Patterns.EMAIL_ADDRESS.matcher(cart.email).matches()) {
+
+                    Toast.makeText(MainActivity.context, "Correct e-mail required", Toast.LENGTH_LONG).show();
+                } else {
+
+                    Toast.makeText(MainActivity.context, "Booking order...", Toast.LENGTH_LONG).show();
+                    OrdersRestUploader.saveOrder(MainActivity.instance, cart.email, cart.getProducts(), cart.getTotal(), cart.pharmacy, "pending");
+
+                    Toast.makeText(MainActivity.context, "Booking order correctly", Toast.LENGTH_LONG).show();
+
+                    MainActivity.cart.products.clear();
+                    MainActivity.cart.total = 0;
+
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            // Create fragment and give it an argument specifying the article it should show
+                            ProductsFragment newFragment = new ProductsFragment();
+                            Bundle args = new Bundle();
+
+                            newFragment.setArguments(args);
+
+                            FragmentTransaction transaction = MainActivity.instance.getSupportFragmentManager().beginTransaction();
+
+                            // Replace whatever is in the fragment_container view with this fragment,
+                            // and add the transaction to the back stack so the user can navigate back
+                            transaction.replace(R.id.fragment_container, newFragment);
+                            transaction.addToBackStack(null);
+
+                            // Commit the transaction
+                            transaction.commit();
+                        }
+                    }, 2000);
+
+
+                    // Create fragment and give it an argument specifying the article it should show
+                    MapFragment newFragment = new MapFragment();
+                    Bundle args = new Bundle();
+
+                    newFragment.setArguments(args);
+
+                    FragmentTransaction transaction = MainActivity.instance.getSupportFragmentManager().beginTransaction();
+
+                    // Replace whatever is in the fragment_container view with this fragment,
+                    // and add the transaction to the back stack so the user can navigate back
+                    transaction.replace(R.id.fragment_container, newFragment);
+                    transaction.addToBackStack(null);
+
+                    // Commit the transaction
+                    transaction.commit();
+
 
                 }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    MainActivity.cart.email = email.getText().toString();
-                }
-            });
-
-
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    CartModel cart = MainActivity.cart;
-                    if (Integer.parseInt( cart.getTotal()) == 0) {
-
-                        Toast.makeText(MainActivity.context, "Your cart is empty", Toast.LENGTH_LONG).show();
-
-                    } else if (cart.email == "" || !android.util.Patterns.EMAIL_ADDRESS.matcher(cart.email).matches()) {
-
-                        Toast.makeText(MainActivity.context, "Correct e-mail required", Toast.LENGTH_LONG).show();
-                    } else {
-
-                        Toast.makeText(MainActivity.context, "Booking order...", Toast.LENGTH_LONG).show();
-                        OrdersRestUploader.saveOrder(MainActivity.instance, cart.email, cart.getProducts(), cart.getTotal(), cart.pharmacy, "pending");
-
-                        Toast.makeText(MainActivity.context, "Booking order correctly", Toast.LENGTH_LONG).show();
-
-                        MainActivity.cart.products.clear();
-                    }
 
 
 
 
-
-                }
-            });
-
-      //  }
-
-
-
-
-/*
-        List<ProductModel> products = db.getAllProducts();
-        for (ProductModel product : products) {
-
-            Log.i("product", product._id);
-            cart.addProduct(product, 1);
-        }
-        cart.getProducts();
-
-
-
-                    String email = "erseco@gmail.com";
-            String products = "[]";
-            String total = "0";
-            String pharmacy = "1";
-
-            OrdersRestUploader.saveOrder(this, email,products, total, pharmacy, "pending");
-  */
+            }
+        });
 
 
         return view;
@@ -153,9 +177,6 @@ public class CartFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
-        } else {
-           // throw new RuntimeException(context.toString()
-            //        + " must implement OnListFragmentInteractionListener");
         }
     }
 
