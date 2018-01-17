@@ -22,3 +22,4 @@ http://dss.ernesto.es:8080/orders/
 
 La aplicación android se puede descargar en:
 
+https://play.google.com/apps/testing/es.ernesto.dss.pharmacydss
