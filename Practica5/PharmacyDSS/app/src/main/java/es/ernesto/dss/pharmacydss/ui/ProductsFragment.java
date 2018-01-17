@@ -68,6 +68,7 @@ public class ProductsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+            ProductContent.refill();
             recyclerView.setAdapter(new MyProductsRecyclerViewAdapter(ProductContent.ITEMS, mListener));
         }
         return view;
@@ -75,14 +76,27 @@ public class ProductsFragment extends Fragment {
 
 
 
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            mListener = (OnListFragmentInteractionListener) getActivity();
+        } catch (ClassCastException e) {
+           // throw new ClassCastException(getActivity().toString()
+           //         + " must implement OnFragmentInteractionListener");
+        }
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+           // throw new RuntimeException(context.toString()
+            //        + " must implement OnListFragmentInteractionListener");
         }
     }
 

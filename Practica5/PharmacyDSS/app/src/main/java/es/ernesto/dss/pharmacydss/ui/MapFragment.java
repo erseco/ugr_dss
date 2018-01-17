@@ -3,11 +3,14 @@ package es.ernesto.dss.pharmacydss.ui;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,9 +19,11 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import es.ernesto.dss.pharmacydss.R;
+import es.ernesto.dss.pharmacydss.controller.ProductsRestDownloader;
 
 public class MapFragment extends Fragment {
 
@@ -64,6 +69,52 @@ public class MapFragment extends Fragment {
                 //googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
 
 
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+
+                        MainActivity.cart.pharmacy = marker.getId();
+
+
+                        CharSequence text = "Downloading database";
+                        int duration = Toast.LENGTH_LONG;
+
+                        Toast toast = Toast.makeText(MainActivity.context, text, duration);
+                        toast.show();
+
+
+                        new ProductsRestDownloader().execute();
+
+
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                // Create fragment and give it an argument specifying the article it should show
+                                ProductsFragment newFragment = new ProductsFragment();
+                                Bundle args = new Bundle();
+
+                                newFragment.setArguments(args);
+
+                                FragmentTransaction transaction = MainActivity.instance.getSupportFragmentManager().beginTransaction();
+
+                                // Replace whatever is in the fragment_container view with this fragment,
+                                // and add the transaction to the back stack so the user can navigate back
+                                transaction.replace(R.id.fragment_container, newFragment);
+                                transaction.addToBackStack(null);
+
+                                // Commit the transaction
+                                transaction.commit();
+                            }
+                        }, 2000);
+
+
+                        // Determine what marker is clicked by using the argument passed in
+                        // for example, marker.getTitle() or marker.getSnippet().
+                        // Code here for navigating to fragment activity.
+                    }
+                });
                 // Add pharmacy markers
 
                 LatLng center = new LatLng(37.1970976248000444, -3.624563798608392);

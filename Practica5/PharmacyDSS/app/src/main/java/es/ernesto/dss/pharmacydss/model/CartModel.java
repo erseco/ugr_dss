@@ -13,23 +13,23 @@ import java.util.List;
 
 public class CartModel {
 
-    private List<ProductQuantityPair> products = new ArrayList<ProductQuantityPair>();
+    public List<ProductQuantityPair> products = new ArrayList<ProductQuantityPair>();
     private int total = 0;
     public String pharmacy = "0";
     public String status = "pending";
+    public String email = "";
 
     public void addProduct(ProductModel product, int quantity) {
 
         ProductQuantityPair pair = new ProductQuantityPair();
         pair.id = product._id;
+        pair.product = product;
+        pair.product.quantity = quantity;
         pair.quantity = quantity;
+
         products.add(pair);
 
         total += Integer.parseInt(product.price);
-    }
-
-    public String getEmail() {
-        return "test@cambiame.com";
     }
 
     public String getProducts() {
@@ -66,6 +66,7 @@ public class CartModel {
     public class ProductQuantityPair {
         public String id;
         public int quantity;
+        public ProductModel product;
     }
 
 

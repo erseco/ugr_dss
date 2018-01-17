@@ -33,12 +33,15 @@ public class ProductsDbHelper extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS products";
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "products.db";
 
     public ProductsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+        this.getWritableDatabase().execSQL("DELETE FROM products;");
     }
+
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
     }

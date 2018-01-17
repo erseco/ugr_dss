@@ -3,7 +3,6 @@ var express = require('express'),
   port = process.env.PORT || 8080,
   mongoose = require('mongoose'),
 
-  Task = require('./api/models/todoListModel'), //created model loading here
   Product = require('./api/models/productModel'), //created model loading here
   Order = require('./api/models/orderModel'), //created model loading here
 

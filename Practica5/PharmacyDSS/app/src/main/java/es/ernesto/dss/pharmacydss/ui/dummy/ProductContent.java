@@ -35,6 +35,17 @@ public class ProductContent {
         }
     }
 
+    public static void refill() {
+
+        ITEMS.clear();
+        List<ProductModel> products = MainActivity.db.getAllProducts();
+        for (ProductModel product : products) {
+            addItem(product);
+        }
+
+    }
+
+
     private static void addItem(ProductModel item) {
         ITEMS.add(item);
         ITEM_MAP.put(item._id, item);
