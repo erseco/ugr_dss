@@ -113,8 +113,6 @@ public class CartFragment extends Fragment {
 
                     Toast.makeText(MainActivity.context, "Booking order correctly", Toast.LENGTH_LONG).show();
 
-                    MainActivity.cart.products.clear();
-                    MainActivity.cart.total = 0;
 
 
                     Handler handler = new Handler();
@@ -122,8 +120,12 @@ public class CartFragment extends Fragment {
                         @Override
                         public void run() {
 
+                            MainActivity.cart.products.clear();
+                            MainActivity.cart.total = 0;
+
+
                             // Create fragment and give it an argument specifying the article it should show
-                            ProductsFragment newFragment = new ProductsFragment();
+                            MapFragment newFragment = new MapFragment();
                             Bundle args = new Bundle();
 
                             newFragment.setArguments(args);
@@ -137,25 +139,14 @@ public class CartFragment extends Fragment {
 
                             // Commit the transaction
                             transaction.commit();
+
+
                         }
-                    }, 2000);
+                    }, 3000);
 
 
-                    // Create fragment and give it an argument specifying the article it should show
-                    MapFragment newFragment = new MapFragment();
-                    Bundle args = new Bundle();
 
-                    newFragment.setArguments(args);
 
-                    FragmentTransaction transaction = MainActivity.instance.getSupportFragmentManager().beginTransaction();
-
-                    // Replace whatever is in the fragment_container view with this fragment,
-                    // and add the transaction to the back stack so the user can navigate back
-                    transaction.replace(R.id.fragment_container, newFragment);
-                    transaction.addToBackStack(null);
-
-                    // Commit the transaction
-                    transaction.commit();
 
 
                 }
