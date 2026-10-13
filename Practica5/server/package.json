@@ -10,10 +10,15 @@
   "author": "Ernesto Serrano",
   "license": "GPLv3",
   "devDependencies": {
-    "nodemon": "*"
+    "nodemon": "^3.1.10"
   },
   "dependencies": {
-    "express": "*",
-    "mongoose": "*"
+    "express": "^4.22.3",
+    "mongoose": "^6.13.11",
+    "cors": "^2.8.6",
+    "body-parser": "^1.20.8"
+  },
+  "engines": {
+    "node": ">=14"
   }
 }

@@ -13,7 +13,7 @@ var cors = require('cors');
 
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/pharmadb', { useMongoClient: true });
+mongoose.connect('mongodb://localhost/pharmadb');
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
